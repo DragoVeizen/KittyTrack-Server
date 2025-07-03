@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: kittytrack-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kittytrack
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: kittytrack-app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/kittytrack
+    command: ["sh", "./wait-for.sh", "db", "npm", "run", "start:dev"]
+
+volumes:
+  db_data:
