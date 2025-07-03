@@ -1,98 +1,120 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# 🐱 KittyTrack Backend
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A **NestJS** backend for KittyTrack—a group expense-sharing app inspired by KittySplit. It includes smart LLM-based input parsing and runs on PostgreSQL via Docker.
 
-## Description
+-----
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## ⚙️ Features
 
-## Project setup
+  * **Full REST API**: Manage users, groups, expenses, and shares, with simplified settlements and expense versioning.
+  * **LLM Endpoint**: Convert natural language descriptions into structured expense data.
+  * **PostgreSQL Database**: Robust data storage for all your expense-sharing needs.
+  * **Dockerized Development Environment**: Easy setup and consistent development across different machines.
 
-```bash
-$ pnpm install
-```
+-----
 
-## Compile and run the project
+## 🧰 Tech Stack
+
+  * **NestJS** (TypeScript)
+  * **PostgreSQL**
+  * **Docker & Docker Compose**
+  * **OpenAI API** or similar LLM
+  * **Prisma** or **TypeORM** (your choice for ORM)
+
+-----
+
+## 🚀 Getting Started
+
+### 1\. Clone and Install
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+git clone https://github.com/yourusername/kittytrack-backend.git
+cd kittytrack-backend
 ```
 
-## Run tests
+### 2\. Create `.env` File
+
+Create a `.env` file in the project root with the following variables:
+
+```
+DATABASE_URL=postgresql://user:password@db:5432/kittytrack
+OPENAI_API_KEY=your_openai_key
+```
+
+### 3\. Run with Docker
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+docker-compose up --build
 ```
 
-## Deployment
+The API will be available at `http://localhost:3000`.
+The PostgreSQL database will be accessible at `localhost:5432`.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+-----
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## 🧠 LLM API (Example)
+
+You can use the LLM endpoint to parse natural language into structured expense data.
+
+**POST** `/llm/parse-expense`
+
+**Request Body:**
+
+```json
+{
+  "prompt": "Sarah paid 45 euros for drinks with Mike and Emma"
+}
+```
+
+**Response:**
+
+```json
+{
+  "paid_by": 1,
+  "total_amount": 45,
+  "participants": [1, 2, 3],
+  "split": {
+    "1": 0.33,
+    "2": 0.33,
+    "3": 0.33
+  }
+}
+```
+
+-----
+
+## 🗃️ Database Design
+
+The database schema includes tables for **users**, **groups**, **expenses**, **shares**, and **settlements**. It also supports **expense versioning** to maintain an editing history.
+
+For detailed relationship mapping, refer to the `/prisma/schema.prisma` file (if using Prisma) or the migrations folder (if using TypeORM).
+
+-----
+
+## 🧪 Running Tests
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+npm run test
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+-----
 
-## Resources
+## 📦 Production
 
-Check out a few resources that may come in handy when working with NestJS:
+For deploying to a production environment:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+docker-compose -f docker-compose.prod.yml up
+```
 
-## Support
+Alternatively, you can deploy to platforms like:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  * Render / Railway / Fly.io
+  * AWS ECS / DigitalOcean App Platform
 
-## Stay in touch
+-----
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 📄 License
 
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the **MIT License**. Contributions are welcome\!
